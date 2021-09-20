@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.6+commit.11564f7e"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contract\\MarketPlace.sol": "SafeMath"
+		},
+		"evmVersion": "berlin",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contract\\MarketPlace.sol": {
+			"keccak256": "0x52d92562a8d1a0a6c2c37abbf8c55c9dd657a9b8112d5e9c80fc49fdf8f5d559",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8bd815381fdae6d3554f0481d1a97a0d53f6c643d1634a7c65112e64392581e5",
+				"dweb:/ipfs/QmeVwV9UmfCvDY5FbSRsqx7Cb667FaJVM1RPReAi7DKGkH"
+			]
+		}
+	},
+	"version": 1
+}
