@@ -34,5 +34,4 @@ contract AltavaMint is ERC721URIStorage {
     _safeMint(account, nftId);
     return nftId;
   }
-    
 }
