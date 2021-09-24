@@ -455,7 +455,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"contract\\hello.sol": "AltavaMint"
+			"contract\\AltavaMaket\\AltavaMint.sol": "AltavaMint"
 		},
 		"evmVersion": "berlin",
 		"libraries": {},
@@ -565,12 +565,12 @@
 				"dweb:/ipfs/QmcsVgLgzWdor3UnAztUkXKNGcysm1MPneWksF72AvnwBx"
 			]
 		},
-		"contract\\hello.sol": {
-			"keccak256": "0xf265248dba0d77800cfb048e5569c0445977c98baa0acb4de271107187e7aca3",
+		"contract\\AltavaMaket\\AltavaMint.sol": {
+			"keccak256": "0xaf02b9548edda97cc443d64727f4aee8a3db0189d3012b6255f51f9d178b0b55",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://a8e4cd4b644a367ea7951b6c8ad969e37edc3fac02b096f8e3cc1df66570ffde",
-				"dweb:/ipfs/QmayWNW8MpHJ6effo5AkYfmGbvGbsvfe2d7jPzHm98fKYM"
+				"bzz-raw://afbed9746d607bb1cfcb30567ae9b9fcf3acd20d2e27b66deee6c7b9feeeeacd",
+				"dweb:/ipfs/QmdhKAmmV9bHqENaJiG5HpXU8EggQwqVqc7iEF3FjWFEN3"
 			]
 		}
 	},
