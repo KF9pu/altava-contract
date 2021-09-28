@@ -10,11 +10,4 @@ contract Modifier {
     _;
   }
 
-  /* 
-    #2. contract 에게 승인된 Pair token 생성가능자 검증
-  */
-  modifier isPairCreater (address creater){
-    require(creater == msg.sender, "The approval of the contract owner is required.");
-    _;
-  }
 }
