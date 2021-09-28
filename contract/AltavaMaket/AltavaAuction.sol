@@ -38,7 +38,7 @@ contract AltavaAuction is AltavaMint {
   Auction[] public auctions; // 경매 배열
   mapping(address => uint[]) public aunctionByUser; // 해당 유저의 진행중인 옥션 번호(배열)
   mapping(address => uint[]) public auctionsBidOnByUser; // 해당 유저의 비딩중인 옥션 번호(배열)
-  mapping(address => uint) refunds; // 경매 종료전 비딩금액 (낙찰되지 않을 경우 반환)
+  mapping(address => uint) refunds; // 비딩금액 (낙찰되지 않을 경우 반환)
 
   // Events
   event AuctionCreated(uint id, string title, uint256 startingPrice, uint256 reservePrice); // 경매 생성시 발생
@@ -56,12 +56,14 @@ contract AltavaAuction is AltavaMint {
     uint256 deadline,
     uint256 startingPrice,
     uint256 reservePrice,
-    address tokenAddress
+    address tokenAddress,
+    uint256 tokenId
   )
     public 
     returns (uint auctionId)
   { 
-    // msg.sender 와 토큰 owner 와 같은지 확인 ( tokenId 필요 )
+    require (tokenOwner(tokenAddress, tokenId)==msg.sender, "Token owners are different.");
+
     auctionId = auctions.length + 1;
     Auction memory  a = auctions[auctionId];
     a.status = AuctionStatus.Pending;

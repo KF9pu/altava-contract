@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contract\\AltavaMaket\\MasterNFT_test01.sol": "MasterNFT_test01"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contract\\AltavaMaket\\MasterNFT_test01.sol": {
+			"keccak256": "0xdaf66da5abba9f9937580f4b1c912aae32bcaaa83b5f6b32561ea61a2d6911e9",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://294250d825d3304fc62e61a80022658276035aee067b95fa5091630ef693d926",
+				"dweb:/ipfs/QmU2KGXcE7uCRi1NsFz9Qz3wdFdsKRfCkhUcDc5ox8oWzU"
+			]
+		}
+	},
+	"version": 1
+}

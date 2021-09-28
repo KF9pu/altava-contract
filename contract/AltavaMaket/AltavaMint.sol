@@ -23,7 +23,7 @@ contract AltavaMint is ERC721URIStorage {
     _;
   }
   
-  function createNFT(address account, string memory tokenURI) 
+  function createNFT(string memory tokenURI) 
     public 
     isOwner
     returns (uint)
@@ -31,7 +31,19 @@ contract AltavaMint is ERC721URIStorage {
     uint256 nftId = AlvataNFTs.length;
     
     _setTokenURI(nftId, tokenURI);
-    _safeMint(account, nftId);
+    _safeMint(msg.sender, nftId);
+    return nftId;
+  }
+  function createNFT() 
+    public 
+    isOwner
+    returns (uint)
+  {
+    uint256 nftId = AlvataNFTs.length;
+    AlvataNFT memory nft = AlvataNFTs[nftId];
+    nft.name = 'a';
+    nft.data1 = 'a';
+    _safeMint(msg.sender, nftId);
     return nftId;
   }
 }
