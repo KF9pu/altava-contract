@@ -2,13 +2,13 @@
 pragma solidity 0.8.6;
 
 import "./External.sol";
-import "./Modifier.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Auction is External, Modifier{
+contract Auction is External{
   using Counters for Counters.Counter;
   Counters.Counter private _auctionId;
+  Counters.Counter private _bidId;
 
   /* 
     #2. Token Auction
@@ -70,18 +70,27 @@ contract Auction is External, Modifier{
   /*  
     #2. 입찰
       - (modifier) 경매 소유자 비딩 금지 
-      - 
+      - returns : 경매 번호 (  )
   */
-  function ActionBid (uint auctionId)
+  function ActionBid (uint auctionId, uint date)
     public
     payable
     isAuctionOwner(Auctions[auctionId].seller)
-    returns(uint)
+    returns(uint bidId)
   {
-    Bid memory bid = Bid(msg.sender, msg.value, block.timestamp);
+    _bidId.increment();
+    bidId = _bidId.current();
+    Bid memory bid = Bid(msg.sender, msg.value, date);
     BiddingForAuction[auctionId].push(bid);
-
+    return bidId;
   }
 
+  /*  
+    #2-1. 경매 소유자 확인 ( 경매 소유자는 비딩 금지 )
+  */
+  modifier isAuctionOwner (address auctionOwner){
+    require(auctionOwner != msg.sender, "The auction owner cannot bid.");
+    _;
+  }
 
 }

@@ -6,9 +6,8 @@ import "@openzeppelin/contracts/token/ERC721/extensions/IERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "./Modifier.sol";
 
-contract SaveData is ERC721URIStorage, Modifier {
+contract SaveData is ERC721URIStorage {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
@@ -26,6 +25,13 @@ contract SaveData is ERC721URIStorage, Modifier {
   
   AltavaNFT[] public AltavaNFTs; // MasterNFT 정보 저장
   mapping (uint => uint) getMasterTokenId; // pairTokenId => MasterTokenId 매핑
+  /*  
+    # contract 소유자 검증
+  */
+  modifier isOwner (){
+    require(owner == msg.sender, "The caller's address is different from the contract owner.");
+    _;
+  }
 
   /* 
     #1. MasterNFT Mint
@@ -35,7 +41,7 @@ contract SaveData is ERC721URIStorage, Modifier {
   */
   function CreateNFT (string memory tokenURI, string memory modelCode, uint32 royalty) 
     public 
-    isOwner(owner)
+    isOwner()
     returns (uint)
   {
     _tokenIds.increment();
@@ -47,7 +53,7 @@ contract SaveData is ERC721URIStorage, Modifier {
     _safeMint(msg.sender, tokenId);
     return tokenId;
   }
-
+  
   /*  
     #2. PairNFT Mint
       - 하위 페어 토큰 mint
@@ -55,7 +61,7 @@ contract SaveData is ERC721URIStorage, Modifier {
   */
   function CreateNFT (string calldata tokenURI, string calldata modelCode, uint256 masterId)
     public
-    isOwner(owner)
+    isOwner()
     returns (uint pairId)
   {
     _tokenIds.increment();
