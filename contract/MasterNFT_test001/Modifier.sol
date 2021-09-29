@@ -10,4 +10,11 @@ contract Modifier {
     _;
   }
 
+  /*  
+    #2. 경매 소유자 확인 ( 경매 소유자는 비딩 금지 )
+  */
+  modifier isAuctionOwner (address auctionOwner){
+    require(auctionOwner != msg.sender, "The auction owner cannot bid.");
+    _;
+  }
 }

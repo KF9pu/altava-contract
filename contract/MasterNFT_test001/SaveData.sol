@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./Modifier.sol";
 
-contract SaveData is ERC721URIStorage {
+contract SaveData is ERC721URIStorage, Modifier {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
@@ -33,13 +33,13 @@ contract SaveData is ERC721URIStorage {
         배열객체에 생성된 토큰 저장, Mint 수익 배분율 설정, ModelCode 설정
       - return : 토큰 id
   */
-  function CreateNFT (string memory tokenURI, string memory modelCode, uint royalty) 
+  function CreateNFT (string memory tokenURI, string memory modelCode, uint32 royalty) 
     public 
     isOwner(owner)
     returns (uint)
   {
     _tokenIds.increment();
-    uint256 tokenId = _tokenIds.crrunt();
+    uint256 tokenId = _tokenIds.current();
 
     AltavaNFTs.push(AltavaNFT(modelCode, royalty, 0));
 
@@ -53,13 +53,13 @@ contract SaveData is ERC721URIStorage {
       - 하위 페어 토큰 mint
       - return : 토큰 id
   */
-  function CreateNFT (string calldata tokenURI, string calldata modelCode, uint masterId)
+  function CreateNFT (string calldata tokenURI, string calldata modelCode, uint256 masterId)
     public
     isOwner(owner)
     returns (uint pairId)
   {
     _tokenIds.increment();
-    uint256 tokenId = _tokenIds.crrunt();
+    uint256 tokenId = _tokenIds.current();
 
     AltavaNFTs.push(AltavaNFT(modelCode, 0, 1));
     getMasterTokenId[pairId] = masterId;
@@ -98,14 +98,6 @@ contract SaveData is ERC721URIStorage {
 
 
 
-
-  /* 
-    # fallback 기본 함수
-      - 
-  */
-  fallback (){
-
-  }
 
 
   /* 개발 해야하는 기능
