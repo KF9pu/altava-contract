@@ -5,7 +5,7 @@ import "./External.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract Auction is External{
+contract AltavaAuction is External{
   using Counters for Counters.Counter;
   Counters.Counter private _auctionId;
   Counters.Counter private _bidId;
@@ -21,7 +21,7 @@ contract Auction is External{
     address seller;             // 0 seller adress
     string title;               // 1 auction title
     string description;         // 1 auction description
-    uint32 deadline;            // 1 경매 종료일
+    uint256 deadline;            // 1 경매 종료일
     uint256 startingPrice;      // 1 경매 시작가
     uint256 reservePrice;       // 1 경매 최소 금액 ( 이가격보다 비딩이 작으면 경매 취소[선택 || 강제] )
     uint256 tokenId;            // 1 판매하는 토큰 ID 값
@@ -38,7 +38,8 @@ contract Auction is External{
 
   mapping (uint => AuctionData) Auctions; // 경매 ID => 경매 정보
   mapping (uint => Bid[]) BiddingForAuction; // 경매 ID => 해당 경매의 모든 비딩
-
+  mapping (address => uint[]) auctionRunByUser; // 해당 지갑이 가진 auction ID
+  mapping (address => uint256) refunds; // 입찰자 지갑주소 => contract로 보낸 이더(BNB)
   /*  
     #1. 경매 생성
       - ( require ) 토큰 소유자 검증
@@ -48,10 +49,10 @@ contract Auction is External{
   (
     string calldata title,
     string calldata description,
-    uint32 deadline,
     uint256 startingPrice,
+    uint32 deadline,
     uint256 reservePrice,
-    uint256 tokenId, 
+    uint256 tokenId,
     address tokenAddress
   )
     public
@@ -60,37 +61,48 @@ contract Auction is External{
     require(tokenOwner(tokenAddress, tokenId)==msg.sender, "Token owners are different.");
     _auctionId.increment();
     auctionId = _auctionId.current();
-    AuctionData memory ad = AuctionData(msg.sender, title, description, deadline, startingPrice, reservePrice, tokenId, tokenAddress, 0);
+    AuctionData memory ad = AuctionData(msg.sender, title, description, (block.timestamp + deadline*1 days + 7 days), startingPrice, reservePrice, tokenId, tokenAddress, 0);
     
-    Auctions[auctionId] = ad;
+    Auctions[auctionId] = ad; // 해당 경매 번호에 경매 정보 저장
+    auctionRunByUser[msg.sender].push(auctionId); // 해당 지갑 주소에 경매 번호 저장
     // event : DB insert ?
     return auctionId;
   }
 
   /*  
     #2. 입찰
-      - (modifier) 경매 소유자 비딩 금지 
+      - (require : isCurrentBid) = 현재 비딩금보다 비율이 1% 이상 높은지 확인
       - returns : 경매 번호 (  )
   */
   function ActionBid (uint auctionId, uint date)
-    public
+    external
     payable
-    isAuctionOwner(Auctions[auctionId].seller)
     returns(uint bidId)
   {
+    require(Auctions[auctionId].seller != msg.sender, "The auction owner cannot bid."); // 경매 소유자 비딩 금지
+    require(msg.value > (Auctions[auctionId].currentBid));
+    // require 종료되지 않은 경매만가능
+    // 
     _bidId.increment();
     bidId = _bidId.current();
     Bid memory bid = Bid(msg.sender, msg.value, date);
     BiddingForAuction[auctionId].push(bid);
+    // 입찰시 bid amount 정보 저장 ( refund )
+    refunds[msg.sender] += msg.value;
+
+    // 상위 입찰시 기존 bid 환불
+
     return bidId;
   }
 
   /*  
-    #2-1. 경매 소유자 확인 ( 경매 소유자는 비딩 금지 )
+    #3. 경매 완료
   */
-  modifier isAuctionOwner (address auctionOwner){
-    require(auctionOwner != msg.sender, "The auction owner cannot bid.");
-    _;
-  }
+  function EndAuction
+  ()
+    public
 
+  {
+
+  }
 }

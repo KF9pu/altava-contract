@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
-contract SaveData is ERC721URIStorage {
+contract AltavaMint is ERC721URIStorage {
   using Counters for Counters.Counter;
   Counters.Counter private _tokenIds;
 
@@ -25,6 +25,7 @@ contract SaveData is ERC721URIStorage {
   
   AltavaNFT[] public AltavaNFTs; // MasterNFT 정보 저장
   mapping (uint => uint) getMasterTokenId; // pairTokenId => MasterTokenId 매핑
+
   /*  
     # contract 소유자 검증
   */
@@ -33,8 +34,17 @@ contract SaveData is ERC721URIStorage {
     _;
   }
 
+  /*  
+    # master token 검증
+  */
+  modifier isMasterToken (uint256 tokenId){
+    require(AltavaNFTs[tokenId].tokenType==0, "It's not a master token.");
+    _;
+  }
+
+
   /* 
-    #1. MasterNFT Mint
+    #1-0. MasterNFT Mint
       - 마스터 토큰 mint
         배열객체에 생성된 토큰 저장, Mint 수익 배분율 설정, ModelCode 설정
       - return : 토큰 id
@@ -55,13 +65,16 @@ contract SaveData is ERC721URIStorage {
   }
   
   /*  
-    #2. PairNFT Mint
+    #1-1. PairNFT Mint
       - 하위 페어 토큰 mint
+      - (modifier : isOwner) = 메소드 호출자가 컨트랙트 소유자인지 확인
+      - (modifier : isMasterToken) = 민트하려는 토큰이 마스터 토큰인지 확인
       - return : 토큰 id
   */
   function CreateNFT (string calldata tokenURI, string calldata modelCode, uint256 masterId)
     public
     isOwner()
+    isMasterToken(masterId)
     returns (uint pairId)
   {
     _tokenIds.increment();
@@ -76,7 +89,25 @@ contract SaveData is ERC721URIStorage {
   }
 
   /*  
-    #3. get token type
+    #1-2. test mint
+       - 경매기능 확인용 민트
+  */
+  function CreateNFT (string calldata modelCode) 
+    public
+    isOwner()
+    returns (uint)
+  {
+    _tokenIds.increment();
+    uint256 tokenId = _tokenIds.current();
+
+    AltavaNFTs.push(AltavaNFT(modelCode, 0, 0));
+    _safeMint(msg.sender, tokenId);
+    return tokenId;
+  }
+
+
+  /*  
+    #2. get token type
       - 해당 토큰의 토큰타입 출력
         0 : master NFT
         1 : pair NFT
