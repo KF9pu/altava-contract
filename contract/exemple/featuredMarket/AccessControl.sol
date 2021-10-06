@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/introspection/ERC165.sol";
 
 /**
- * @dev External interface of AccessControl declared to support ERC165 detection.
+   @dev ERC165 탐지를 지원하도록 선언된 AccessControl의 외부 인터페이스입니다.
  */
 interface IAccessControl {
     function hasRole(bytes32 role, address account) external view returns (bool);
@@ -18,43 +18,44 @@ interface IAccessControl {
 }
 
 /**
- * @dev Contract module that allows children to implement role-based access
- * control mechanisms. This is a lightweight version that doesn't allow enumerating role
- * members except through off-chain means by accessing the contract event logs. Some
- * applications may benefit from on-chain enumerability, for those cases see
- * {AccessControlEnumerable}.
- *
- * Roles are referred to by their `bytes32` identifier. These should be exposed
- * in the external API and be unique. The best way to achieve this is by
- * using `public constant` hash digests:
- *
- * ```
- * bytes32 public constant MY_ROLE = keccak256("MY_ROLE");
- * ```
- *
- * Roles can be used to represent a set of permissions. To restrict access to a
- * function call, use {hasRole}:
- *
- * ```
- * function foo() public {
- *     require(hasRole(MY_ROLE, msg.sender));
- *     ...
- * }
- * ```
- *
- * Roles can be granted and revoked dynamically via the {grantRole} and
- * {revokeRole} functions. Each role has an associated admin role, and only
- * accounts that have a role's admin role can call {grantRole} and {revokeRole}.
- *
- * By default, the admin role for all roles is `DEFAULT_ADMIN_ROLE`, which means
- * that only accounts with this role will be able to grant or revoke other
- * roles. More complex role relationships can be created by using
- * {_setRoleAdmin}.
- *
- * WARNING: The `DEFAULT_ADMIN_ROLE` is also its own admin: it has permission to
- * grant and revoke this role. Extra precautions should be taken to secure
- * accounts that have been granted it.
- */
+ * @dev 
+  자녀가 역할 기반 액세스를 구현할 수 있는 계약 모듈
+  제어 메커니즘. 역할 열거를 허용하지 않는 경량 버전입니다.
+  계약 이벤트 로그에 액세스하여 오프체인 수단을 제외한 멤버. 썸
+  애플리케이션은 온체인 열거성의 이점을 얻을 수 있습니다. 이러한 경우 참조
+  {AccessControlEnumable}.
+ 
+   역할은 'bytes32' 식별자로 참조됩니다. 이것들은 노출되어야 한다.
+   외부 API에서 고유해야 합니다. 이것을 성취하는 가장 좋은 방법은
+   '공개 상수' 해시 다이제스트 사용:
+ 
+   ```
+   bytes32 public constant MY_ROLE = keccak256("MY_ROLE");
+   ```
+ 
+  역할은 권한 집합을 나타내는 데 사용할 수 있습니다. 함수 호출에 대한 액세스를 제한하려면 {hasRole}을(를) 사용하십시오.
+ 
+   ```
+   function foo() public {
+       require(hasRole(MY_ROLE, msg.sender));
+       ...
+   }
+   ```
+ 
+  {grantRole}을(를) 통해 역할을 동적으로 부여 및 취소할 수 있습니다.
+  {revokeRole} 함수입니다. 각 역할에는 연결된 관리자 역할만 있습니다.
+  역할의 관리자 역할이 있는 계정은 {grantRole} 및 {revokeRole}을(를) 호출할 수 있습니다.
+ 
+  기본적으로 모든 역할의 관리자 역할은 'DEFAULT_ADMIN_ROLE'이며, 이는 다음을 의미한다.
+  이 역할을 가진 계정만 다른 계정을 허가하거나 취소할 수 있습니다.
+  배역할 다음을 통해 보다 복잡한 역할 관계를 만들 수 있습니다.
+  {_setRoleAdmin}.
+ 
+  WARNING: 'DEFAULT_ADMIN_ROLE'도 자체 관리자이며, 다음과 같은 권한이 있습니다.
+  이 역할을 부여 및 취소합니다. 보안을 위해 추가 예방 조치를 취해야 합니다.
+  그것을 허가받은 account
+*/
+
 abstract contract AccessControl is Context, IAccessControl, ERC165 {
     struct RoleData {
         mapping (address => bool) members;
@@ -66,41 +67,38 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     bytes32 public constant DEFAULT_ADMIN_ROLE = 0x00;
 
     /**
-     * @dev Emitted when `newAdminRole` is set as ``role``'s admin role, replacing `previousAdminRole`
-     *
-     * `DEFAULT_ADMIN_ROLE` is the starting admin for all roles, despite
-     * {RoleAdminChanged} not being emitted signaling this.
-     *
-     * _Available since v3.1._
+     * @dev 
+        'newAdminRole'이 '이전 AdminRole' 대신 '역할'의 관리자 역할로 설정될 때 방출됩니다.
+        'DEFAULT_ADMIN_ROLE'은 모든 역할의 시작 관리자이지만 이 신호를 보내는 {RoleAdminChanged}이(가) 내보내지지 않습니다.
+        _Available since v3.1._
      */
     event RoleAdminChanged(bytes32 indexed role, bytes32 indexed previousAdminRole, bytes32 indexed newAdminRole);
 
     /**
-     * @dev Emitted when `account` is granted `role`.
-     *
-     * `sender` is the account that originated the contract call, an admin role
-     * bearer except when using {_setupRole}.
+       @dev 
+        계정'에 '역할'이 부여될 때 방출됩니다.
+        'sender'는 {_setupRole}을(를) 사용하는 경우를 제외하고 관리자 역할 전달자인 계약 호출을 시작한 계정입니다.
      */
     event RoleGranted(bytes32 indexed role, address indexed account, address indexed sender);
 
     /**
-     * @dev Emitted when `account` is revoked `role`.
-     *
-     * `sender` is the account that originated the contract call:
-     *   - if using `revokeRole`, it is the admin role bearer
-     *   - if using `renounceRole`, it is the role bearer (i.e. `account`)
+       @dev 
+       계정'이 '역할' 취소될 때 방출됩니다.
+      
+       통화는 계약 콜의 발단이 된 계정이다.
+        - revokeRole을 사용하는 경우 관리자 역할 전달자입니다.
+        - renounceRole을 사용할 경우 역할 전달자(예: 계정)
      */
     event RoleRevoked(bytes32 indexed role, address indexed account, address indexed sender);
 
     /**
-     * @dev Modifier that checks that an account has a specific role. Reverts
-     * with a standardized message including the required role.
-     *
-     * The format of the revert reason is given by the following regular expression:
-     *
-     *  /^AccessControl: account (0x[0-9a-f]{20}) is missing role (0x[0-9a-f]{32})$/
-     *
-     * _Available since v4.1._
+      @dev 계정에 특정 역할이 있는지 확인하는 수정자. 필요한 역할을 포함한 표준화된 메시지로 돌아갑니다.
+     
+      되돌리기 사유 형식은 다음 정규식으로 제공됩니다 :
+     
+       /^AccessControl: account (0x[0-9a-f]{20}) is missing role (0x[0-9a-f]{32})$/
+     
+      _Available since v4.1._
      */
     modifier onlyRole(bytes32 role) {
         _checkRole(role, _msgSender());
@@ -123,11 +121,11 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 
     /**
-     * @dev Revert with a standard message if `account` is missing `role`.
-     *
-     * The format of the revert reason is given by the following regular expression:
-     *
-     *  /^AccessControl: account (0x[0-9a-f]{20}) is missing role (0x[0-9a-f]{32})$/
+      @dev 
+      account에 role이 없으면 표준 메시지로 되돌립니다.
+      되돌리기 사유 형식은 다음 정규식으로 제공됩니다.
+     
+       /^AccessControl: account (0x[0-9a-f]{20}) is missing role (0x[0-9a-f]{32})$/
      */
     function _checkRole(bytes32 role, address account) internal view {
         if(!hasRole(role, account)) {
@@ -141,55 +139,53 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 
     /**
-     * @dev Returns the admin role that controls `role`. See {grantRole} and
-     * {revokeRole}.
-     *
-     * To change a role's admin, use {_setRoleAdmin}.
+       @dev 
+       '역할'을 제어하는 관리자 역할을 반환합니다. {grantRole} 및 {revokeRole}을(를) 참조하십시오.
+       역할의 관리자를 변경하려면 {_setRoleAdmin}을(를) 사용하십시오.
      */
     function getRoleAdmin(bytes32 role) public view override returns (bytes32) {
         return _roles[role].adminRole;
     }
 
     /**
-     * @dev Grants `role` to `account`.
-     *
-     * If `account` had not been already granted `role`, emits a {RoleGranted}
-     * event.
-     *
-     * Requirements:
-     *
-     * - the caller must have ``role``'s admin role.
+       @dev 
+        '계정'에 '역할'을 부여합니다.
+
+        'account'에 아직 'role'이 부여되지 않은 경우 {RoleGranted}을(를) 내보냅니다.
+        사건을 일으키다
+
+        요구사항:
+
+        - 발신자는 ''역할''의 관리자 역할이 있어야 합니다.
      */
     function grantRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
         _grantRole(role, account);
     }
 
     /**
-     * @dev Revokes `role` from `account`.
-     *
-     * If `account` had been granted `role`, emits a {RoleRevoked} event.
-     *
-     * Requirements:
-     *
-     * - the caller must have ``role``'s admin role.
+       @dev 
+        account에서 '역할'을 취소합니다.
+        'account'에 'role'이 부여된 경우 {RoleRevoked} 이벤트를 발생시킵니다.
+        require: - 발신자는 ''역할''의 관리자 역할이 있어야 합니다.
      */
     function revokeRole(bytes32 role, address account) public virtual override onlyRole(getRoleAdmin(role)) {
         _revokeRole(role, account);
     }
 
     /**
-     * @dev Revokes `role` from the calling account.
-     *
-     * Roles are often managed via {grantRole} and {revokeRole}: this function's
-     * purpose is to provide a mechanism for accounts to lose their privileges
-     * if they are compromised (such as when a trusted device is misplaced).
-     *
-     * If the calling account had been granted `role`, emits a {RoleRevoked}
-     * event.
-     *
-     * Requirements:
-     *
-     * - the caller must be `account`.
+       @dev 
+        호출 계정에서 '역할'을 취소합니다.
+
+        역할은 종종 {grantRole} 및 {revokeRole}을(를) 통해 관리됨: 이 함수의
+        목적은 계정이 그들의 특권을 잃는 메커니즘을 제공하는 것이다.
+        손상된 경우(예: 신뢰할 수 있는 장치가 잘못 배치된 경우).
+
+        호출 계정에 '역할'이 부여된 경우 {RoleRevoked}을(를) 내보냅니다.
+        사건을 일으키다
+
+        require:
+
+        - 발신자는 반드시 'account'
      */
     function renounceRole(bytes32 role, address account) public virtual override {
         require(account == _msgSender(), "AccessControl: can only renounce roles for self");
@@ -198,29 +194,30 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 
     /**
-     * @dev Grants `role` to `account`.
-     *
-     * If `account` had not been already granted `role`, emits a {RoleGranted}
-     * event. Note that unlike {grantRole}, this function doesn't perform any
-     * checks on the calling account.
-     *
-     * [WARNING]
-     * ====
-     * This function should only be called from the constructor when setting
-     * up the initial roles for the system.
-     *
-     * Using this function in any other way is effectively circumventing the admin
-     * system imposed by {AccessControl}.
-     * ====
+       @dev 
+       '계정'에 'role'을 부여합니다.
+
+        'account'에 아직 'role'이 부여되지 않은 경우 {RoleGranted}을(를) 내보냅니다.
+        사건을 일으키다 {grantRole}과 달리 이 함수는 어떤 작업도 수행하지 않습니다.
+        착신 계좌 수표
+
+        [WARNING]
+        ====
+        이 함수는 설정할 때만 생성자에서 호출해야 합니다.
+        시스템의 초기 역할을 수행합니다.
+
+        이 기능을 다른 방법으로 사용하면 관리자를 효과적으로 우회할 수 있습니다.
+        시스템이 {AccessControl}에 의해 부과되었습니다.
+        ====
      */
     function _setupRole(bytes32 role, address account) internal virtual {
         _grantRole(role, account);
     }
 
     /**
-     * @dev Sets `adminRole` as ``role``'s admin role.
-     *
-     * Emits a {RoleAdminChanged} event.
+       @dev 
+        adminRole을 ''역할''의 관리자 역할로 설정합니다.
+        {RoleAdminChanged} 이벤트를 내보냅니다.
      */
     function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
         emit RoleAdminChanged(role, getRoleAdmin(role), adminRole);
