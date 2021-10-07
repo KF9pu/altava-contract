@@ -24,46 +24,46 @@ contract ERC721Standard is Context, AccessControl, ERC721Enumerable, ERC721Burna
     uint256 public constant UNIT = 1e18;
 
     constructor(
-        string memory _name,
-        string memory _symbol
-        ) ERC721(_name, _symbol) {
-            _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-            _setupRole(MINTER_ROLE, _msgSender());
+      string memory _name,
+      string memory _symbol
+    ) ERC721(_name, _symbol) {
+      _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
+      _setupRole(MINTER_ROLE, _msgSender());
     }
 
     // ========== ADMIN FUNCTIONS ==========
 
     function mint(
-        address _to,
-        string memory _uri,
-        address[] memory _feeAddresses,
-        uint256[] memory _fees
-        ) external virtual {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Only minter");
-        _safeMint(_to, _uri, _feeAddresses, _fees);
+      address _to,
+      string memory _uri,
+      address[] memory _feeAddresses,
+      uint256[] memory _fees
+    ) external virtual {
+      require(hasRole(MINTER_ROLE, _msgSender()), "Only minter");
+      _safeMint(_to, _uri, _feeAddresses, _fees);
     }
 
     function batchMint(
-        address[] memory _to,
-        string[] memory _uri,
-        address[][] memory _feeAddresses,
-        uint256[][] memory _fees
+      address[] memory _to,
+      string[] memory _uri,
+      address[][] memory _feeAddresses,
+      uint256[][] memory _fees
     ) external {
-        require(hasRole(MINTER_ROLE, _msgSender()), "Only minter");
-        require(_to.length == _uri.length && _to.length == _feeAddresses.length && _to.length == _fees.length, "Invalid params");
-        for(uint256 i = 0; i < _to.length; i++) {
-            _safeMint(_to[i], _uri[i], _feeAddresses[i], _fees[i]);
-        }
+      require(hasRole(MINTER_ROLE, _msgSender()), "Only minter");
+      require(_to.length == _uri.length && _to.length == _feeAddresses.length && _to.length == _fees.length, "Invalid params");
+      for(uint256 i = 0; i < _to.length; i++) {
+          _safeMint(_to[i], _uri[i], _feeAddresses[i], _fees[i]);
+      }
     }
 
     function setFeeAddress(
-        uint256 _tokenId,
-        uint256 _addressPosition,
-        address _feeAddress
-        ) external virtual {
-        require(_feeAddress != address(0));
-        require(_msgSender() == feeAddresses[_tokenId][_addressPosition], "Invalid account");
-        feeAddresses[_tokenId][_addressPosition] = _feeAddress;
+      uint256 _tokenId,
+      uint256 _addressPosition,
+      address _feeAddress
+    ) external virtual {
+      require(_feeAddress != address(0));
+      require(_msgSender() == feeAddresses[_tokenId][_addressPosition], "Invalid account");
+      feeAddresses[_tokenId][_addressPosition] = _feeAddress;
     }
 
     // ========== VIEW FUNCTIONS ==========
@@ -95,6 +95,8 @@ contract ERC721Standard is Context, AccessControl, ERC721Enumerable, ERC721Burna
     function supportsInterface(
         bytes4 _interfaceId
         ) public view virtual override(ERC721, ERC721Enumerable, AccessControl) returns (bool) {
+
+            
         return _interfaceId == ROYALTY_INTERFACE ||
          super.supportsInterface(_interfaceId);
     }

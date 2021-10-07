@@ -126,6 +126,9 @@ abstract contract ERC721Enumerable is ERC721, IERC721Enumerable {
         delete _ownedTokens[from][lastTokenIndex];
     }
 
+
+    
+
     /**
       @dev
         이 확장의 토큰 추적 데이터 구조에서 토큰을 제거하는 개인 함수입니다.

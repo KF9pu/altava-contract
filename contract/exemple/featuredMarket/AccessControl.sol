@@ -194,7 +194,7 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 
     /**
-       @dev 
+      @dev 
        '계정'에 'role'을 부여합니다.
 
         'account'에 아직 'role'이 부여되지 않은 경우 {RoleGranted}을(를) 내보냅니다.
@@ -215,8 +215,8 @@ abstract contract AccessControl is Context, IAccessControl, ERC165 {
     }
 
     /**
-       @dev 
-        adminRole을 ''역할''의 관리자 역할로 설정합니다.
+      @dev 
+        adminRole을 ''Role''의 관리자 역할로 설정합니다.
         {RoleAdminChanged} 이벤트를 내보냅니다.
      */
     function _setRoleAdmin(bytes32 role, bytes32 adminRole) internal virtual {
