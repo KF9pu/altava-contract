@@ -28,12 +28,11 @@ contract ERC721Standard is Context, AccessControl, ERC721Enumerable, ERC721Burna
       string memory _symbol
     ) ERC721(_name, _symbol) {
       _setupRole(DEFAULT_ADMIN_ROLE, _msgSender());
-
       _setupRole(MINTER_ROLE, _msgSender());
     }
 
     // ========== ADMIN FUNCTIONS ==========
-
+ 
     function mint(
       address _to,
       string memory _uri,
